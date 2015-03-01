@@ -1,0 +1,88 @@
+        <div class="wrap-header">
+            <div class="pdleft12">
+                <i class="iconclary">&#xe611;</i><a href="{{root}}">首页</a>
+                <span class="nav-step">&gt;</span>
+                <a href="{{artical}}">文章管理</a>
+                <span class="nav-step">&gt;</span>
+                <span>修改文章</span>
+            </div>
+        </div>
+        <div class="wrap-main">
+            <div class="insert-from">
+                <form action="/upload/" method="post" enctype='multipart/form-data'>
+                    <input type="file" id="slt" name="thumbnail" value="" />
+                    <input type="text" name="testt">
+                    <input type="submit" value="tijiao">
+                </form>
+                <form action="{{artical}}" method="post">
+                    {{#with data}}
+                    <table class="insert-box" width="100%">
+                        <tbody>
+                            <tr>
+                                <th width="120">访问地址 :</th>
+                                <td><input type="text" name="seo_url" value="{{seo_url}}" /></td>
+                            </tr>
+                            <tr>
+                                <th>标题 :</th>
+                                <td><input type="text" name="title" value="{{title}}" /></td>
+                            </tr>
+                            <tr>
+                                <th>简介 :</th>
+                                <td><input type="text" name="intro" value="{{intro}}" /></td>
+                            </tr>
+                            <tr>
+                                <th>作者 :</th>
+                                <td><input type="text" name="author" value="{{author}}" /></td>
+                            </tr>
+                            <tr>
+                                <th>缩略图 :</th>
+                                <td><input type="file" id="slt" name="thumbnail" value="{{thumbnail}}" /><input type="button" value="upload" name="upload" /></td>
+                            </tr>
+                            <tr>
+                                <th>内容 :</th>
+                                <td><textarea class="common-insert-textarea" name="content" id="" cols="80" rows="7">{{content}}</textarea></td>
+                            </tr>
+                            <tr>
+                                <th>分类 :{{category}}</th>
+                                <td>
+                                    {{#each categoryall}}
+
+                                        <label for="category{{id}}"><input type="radio" id="category{{id}}" name="category" value="{{id}}" {{ischecked}} />{{name}}</label>
+                                    {{/each}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>标签 :</th>
+                                <td>
+                                    {{#each tagall}}
+                                        <label for="tag{{id}}"><input type="checkbox" name="tag" id="tag{{id}}" value="{{id}}" {{ischecked}}/>{{name}}</label>
+                                    {{/each}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Title :</th>
+                                <td><input type="text" name="seo_title" value="{{seo_title}}" /></td>
+                            </tr>
+                            <tr>
+                                <th>Keyword :</th>
+                                <td><input type="text" name="seo_keyword" value="{{seo_keyword}}" /></td>
+                            </tr>
+                            <tr>
+                                <th>Description :</th>
+                                <td><input type="text" name="seo_description" value="{{seo_description}}" /></td>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <td>
+                                    <input class="btn" type="submit" value="提交"/>
+                                    <input class="btn" type="submit" value="取消"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <input type="hidden" value="modify,{{id}}" name="params"/>
+                    {{/with}}
+                </form>
+                
+            </div>
+        </div>

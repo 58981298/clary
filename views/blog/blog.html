@@ -1,0 +1,11 @@
+<ul class="list">
+	{{#each list}}
+		<li>
+			<a href="/blog/{{seo_url}}/">
+				<h3>{{title}}</h3>
+				<span>{{intro}}</span>
+			</a>
+			<em>作者: {{author}}, 创建于: {{format createtime}}</em>
+		</li>
+	{{/each}}
+</ul>

@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<style>
+	.on { color: red; }
+</style>
+</head>
+<body>
+	<div id="pagerView"></div>
+	<script>
+	/**
+	 * 无css的分页控件
+	 * create by wangcl
+	 * version: 0.0.1
+	 * explain: 选中的分页类为 on, 可自定义css
+	 */
+		var PagerView = function(id){
+			var self = this;
+			this.id = id; // 接受分页渲染的id
+			this.wrap = null; // document.getElementById(id),获取id对象;
+			this.index = 1; // 当前页数，从1开始
+			this.item = 10; // 单页记录数
+			this.itemCount = 110; // 总记录数
+			this.maxButtons = 9; // 最大分页按钮数
+			this.pageCount = 0; // 总页数
+			/**
+			 * 外部onclick，处理实际需求事件
+			 */
+			this.onclick = function(index){};
+			/**
+			 * 内部onclick，处理分页的渲染
+			 */
+			this._onclick = function(index){
+				self.index = index;
+				self.onclick( index );
+				self.render();
+			};
+			/**
+			 * 分页逻辑计算层
+			 */
+			this.calc = function(){
+				self.pageCount = parseInt( Math.ceil( self.itemCount / self.item ) );
+				self.index = parseInt(self.index);
+				self.index = self.index < 1 ? 1 : self.index; // 防止页数少于1
+				self.index = self.index > self.pageCount ? self.pageCount : self.index; // 防止页数大于总页数
+			};
+			/**
+			 * 分页渲染层
+			 */
+			this.render = function(){
+				if( self.id != 'undefined' ){
+					self.wrap = document.getElementById( self.id );
+				}
+				self.calc();
+				var html = '';
+				var leftIndex = Math.max( 1 , self.index - Math.floor( parseInt( self.maxButtons - 1 ) / 2 ) );
+				var rightIndex = Math.min( self.pageCount , leftIndex + self.maxButtons - 1 );
+				leftIndex = Math.max( 1 , rightIndex - self.maxButtons + 1 );
+				if( self.pageCount > 1 ){
+					if( self.index != 1 ){
+						html += '<a href="javascript:///1">首页</a>' +
+								'<a href="javascript:///' + (self.index-1) + '">上一页</a>' +
+								'<a href="javascript:///1">1...</a>';
+					} else {
+						html += '<span>首页</span>' +
+								'<span>上一页</span>';
+					}
+				}
+				if( self.pageCount > 1 ){
+					for( var i = leftIndex ; i <= rightIndex ; i++ ){
+						if( i == self.index ) html += '<span class="on">' + i + '</span>';
+						else html += '<a href="javascript:///' + i + '">' + i + '</a>';
+					}
+				}
+				if( self.pageCount > 1 ){
+					if( self.index != self.pageCount ){
+						html += '<a href="javascript:///'+self.pageCount+'">...'+self.pageCount+'</a>'+
+								'<a href="javascript:///' + (self.index+1)  + '">下一页</a>' +
+								'<a href="javascript:///' + self.pageCount + '">尾页</a>';
+					} else {
+						html += '<span>下一页</span>' +
+								'<span>尾页</span>';
+					}
+				}
+				self.wrap.innerHTML = html;
+				var a_list = self.wrap.getElementsByTagName('a');
+				for(var i in a_list){
+					a_list[i].onclick = function(){
+						var index = this.getAttribute('href');
+						if( index != "undefined" && index != "" ){
+							index = this.getAttribute('href').replace('javascript:///','');
+							self._onclick(index);
+						}
+					}
+				}
+			};
+		};
+		/**
+		 * 分页控件实例，可创建多个实例
+		 */
+		var pp = new PagerView('pagerView');
+		pp.itemCount = 300; // 传入总记录数
+		pp.item = 10; // 传入单页记录数
+		pp.onclick = function(index){
+			console.log(index);
+		}
+		pp.render();
+
+		var test = new RegExp("\[attach]\d+\[\/attach]","g");
+		var qq = "123[attach]930598304[/attach]789";
+		var ww = qq.replace(/\[attach]\d+\[\/attach]/gi,"asd");
+		console.log(ww);
+	</script>
+</body>
+</html>

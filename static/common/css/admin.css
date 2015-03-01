@@ -1,0 +1,40 @@
+@charset "utf-8";
+* { margin: 0; padding: 0; border: 0; }
+html, body { height: 100%; }
+ul li { list-style: none; }
+a { text-decoration: none; }
+body { background: url(../img/admin-relate.jpg) no-repeat center top; -webkit-background-size: cover; } 
+.cls:after { content: ""; clear: both; display: table; visibility: hidden; }
+.cls { zoom: 1;	}
+
+/* 基本架构 */
+.section { min-width: 680px; height: 100%; background: rgba(0,0,0,0.4); }
+.align-center { display: table; height: 100%; margin: 0 auto; padding: 20px 0; text-align: center; font-size: 16px; }
+.vertical-middle { display: table-cell; vertical-align: middle; }
+.main-box { width: 1200px; background: rgba(255, 255, 255, 0.75); border-radius: 4px; padding: 20px }
+.btn { display: block; height: 30px; line-height: 30px; background: rgba(0, 0, 0, 0.7); color: red; font-size: 20px; }
+.btn-hover:hover { opacity: 0.9; text-decoration: none; filter: alpha(opacity=80); }
+/* 模块公共 */
+.blockquote { margin: 0 0 0 0; padding: 20px 0 20px 0; border-top: 1px solid rgba(100,100,100,0.5); }
+.blockquote:first-child { padding: 0 0 20px 0; border: 0; }
+
+/* table */
+table { width: 100%; border-top: 1px solid rgba(100,100,100,0.5); border-left: 1px solid rgba(100,100,100,0.5); }
+table tr th, table tr td { border-right: 1px solid rgba(100,100,100,0.5); border-bottom: 1px solid rgba(100,100,100,0.5); height: 28px; line-height: 28px; }
+input { display: block; width: 94%; padding: 0 3%; height: 100%; text-indent: 0px; background: transparent; }
+input:focus { background: #fff; }
+.field0 { width: 13%; }
+.field1 { width: 13%; }
+.field2 { width: 23%; }
+.field3 { width: 9%; }
+.field4 { width: 9%; }
+.field5 { width: 9%; }
+.field6 { width: 7%; }
+.field7 { width: 3%; }
+.field8 { width: 5%; }
+.field100 { width: 3%; }
+.field101 { width: 3%; }
+.field102 { width: 3%; }
+.listen-del { color: red; }
+.listen-del:hover { cursor: pointer; }
+.artical-relate { max-height: 580px; overflow-y: scroll; }

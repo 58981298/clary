@@ -1,0 +1,215 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>mustNum</title>
+<style>
+	.cls:after { content: ""; clear: both; display: table; }
+	.cls { zoom: 1;	}
+	a { cursor: pointer; }
+	#showHideClick, #showHide { float: left; }
+	div { height: 24px; }
+</style>
+</head>
+<body>
+	<div class="cls">
+		<a id="showHideClick">点击我</a>
+		<span id="showHide">&nbsp;&nbsp;&nbsp;i can show, i can hide.<span>
+	</div>
+	<div><label>输入框必须是数字：<input type="text" id="mustNum" placeholder="I am placeholder."></label></div>
+	<div>
+		删除第一个option，值为123：
+		<select id="slt">
+			<option>123</option>
+			<option>234</option>
+			<option>345</option>
+			<option>456</option>
+		</select>
+	</div>
+	<div>
+		<span class="is-seld seld">seld</span>
+		<span class="is-seld">seld</span>
+		<span class="is-seld">seld</span>
+		<span id="seld"></span>
+	</div>
+	<div id="random"></div>
+	<div id="addZero"></div>
+	<div id="disorder"></div>
+	<div id="disorder2"></div>
+	<div>后台在预加载图片</div>
+	<div id="getYMD"></div>
+	<div id="getImgInfo"></div>
+	
+	<script>
+		var tool = {
+			showHide : function(id){
+				var ele = document.getElementById(id);
+				if(ele){
+					if( ele.style.display == "none" ) ele.style.display = "block";
+					else ele.style.display = "none";
+				}
+				else console.log("no exist id");
+			},
+			mustNumber : function(id, num, fn){
+				var ele = document.getElementById(id);
+				num = num ? num : 11;
+				if(ele){
+					ele.onkeyup = function(e){
+						var code = e.keyCode;
+						var val = this.value;
+						// 48-57是键盘字母上面的数字，96-105是右侧键盘的数字
+						if( (code >= 48 && code <= 57) || (code >= 96 && code <= 105) ){
+							if( val.length > num ){
+								val = val.replace(/[^0-9]/g, "").substr(0,num);
+								this.value = val;
+							}
+						} // 8是退回键Backspace，37-40是方向按键
+						else if( (e.keyCode != 8 && e.keyCode < 37) || e.keyCode > 40 ){
+							val = val.replace(/[^0-9]/g, "").substr(0,num);
+							this.value = val;
+						}
+					}
+					ele.onblur = function(){
+						if(typeof fn == "Function") fn();
+					}
+				}
+				else console.log("no exist id");	
+			},
+			removeOptionFirst: function(id,text){
+				var ele = document.getElementById(id);
+				var op = ele.getElementsByTagName("option")[0];
+				if(op.innerHTML == text ) ele.removeChild(op);
+			},
+			seld: function(classname){
+				var c = document.getElementsByClassName(classname);
+				for(var i = 0 ; i < c.length ; i++){
+					var cnArr = c[i].className.split(" ");
+					for(var j = 0 ; j < cnArr.length ; j++){
+						if(cnArr[j] == "seld") return true;
+					}
+				}
+				return false;
+			},
+			// 生成随机数（范围min-max）
+			random: function(min, max){
+				return Math.floor( Math.random()*(max+1-min)+min );
+			},
+			// 生成乱序，num个数，mul倍数，base基数
+			disorder: function(num,mul,base){
+				if(!mul) mul = 1;
+				if(base=="" || base == undefined || base == null) base = 0; 
+				var order = []
+				, disorder = []
+				, random = 0;
+				for(var i = 0; i < num; i++){ order.push(i*mul+base); }
+				for(var j = 0; j < num; j++){
+					random = Math.floor( Math.random()*order.length );
+					disorder.push( order[random] );
+					order.splice(random,1);
+				}
+				return disorder;
+			},
+			// 不足位数补0
+			addZero: function(num, length){
+				var reg = /\d{5}/;
+				for( var i = 0; i < length; i++ ){
+					if( reg.test(num) ) return num;
+					else {
+						num = "0"+num;
+					}
+				}
+			},
+			loadPic: function(arr,ind,max,fn){
+				var img = new Image();
+				img.src = arr[ind];
+				img.onload = function(){
+					ind++;
+					if( ind < max ){
+						tool.loadPic(arr,ind,max,fn);
+					} else if( fn ) {
+						fn();
+					}
+				}
+			},
+			// 通过数组预加载图片
+			loadPicArr: function(arr,fn){
+				tool.loadPic( arr, 0, arr.length, fn );
+			},
+			// 增删placeholder
+			placeholder: function(id){
+				var ele = document.getElementById(id);
+				var placeholder = ele.placeholder;
+				ele.onfocus = function(){
+					ele.placeholder = "";
+				}
+				ele.onblur = function(){
+					ele.placeholder = placeholder;
+				}
+			},
+			// 获得年月日
+			getYMD: function(type){
+                var d = new Date();
+                var year = d.getFullYear();
+                var month = d.getMonth()+1;
+                if(year<2014) year = 2014;
+                switch(type){
+                    case "year": return year; break;
+                    case "month": return month; break;
+                    case "day": return d.getDate(); break;
+                    default: return year+"-"+month+"-"+d.getDate(); break;
+                }
+            },
+            // 预加载图片的宽高
+            getImgInfo: function(url,fn,fn2){
+				var starttime = new Date().getTime();
+				url = url+"?"+starttime; // 图片加时间戳，防止缓存
+				var img = new Image();
+				var isExist = true;
+				img.onerror = function(){ isExist = false; } // 图片是否存在
+				img.src = url;
+				var interval = setInterval(function(){
+					if( !isExist ) { // 图片是否存在
+						clearInterval(interval);
+						if(fn2) fn2({ error_message: "image is not exist." });
+					}
+					if( img.width>0 || img.height >0 ){ //获得图片宽高，停止循环
+						clearInterval(interval);
+						if(fn) fn({
+							url: img.src,
+							width: img.width,
+							height: img.height,
+							time: new Date().getTime()-starttime,
+						});
+						
+					}
+				},40);
+			}
+		}
+		document.getElementById("showHideClick").onclick = function(){ 
+		tool.showHide("showHide"); }
+		tool.mustNumber("mustNum",11);
+		tool.removeOptionFirst("slt",123);
+		document.getElementById("seld").innerHTML = "，是否有被选中：" + tool.seld("is-seld");
+		document.getElementById("random").innerHTML = "随机20-40的数："+tool.random(20,40);
+		document.getElementById("disorder").innerHTML = "随机乱数(6个数，基数为5，倍数为2，结果为5+2*X)："+tool.disorder(6,2,5);
+		document.getElementById("disorder2").innerHTML = "随机乱数(6个数，基数为0，倍数为1，结果为0+1*X)："+tool.disorder(6,1,0);
+		document.getElementById("addZero").innerHTML = "数字不足5位数即在数字前补零，当前数字为3，"+tool.addZero(3);
+		tool.loadPicArr([
+			'./img/qrcode.png',
+			'./img/qrcode.png',
+			'./img/qrcode.png'
+		],function(){
+			alert("图片预加载完成");
+		});
+		tool.placeholder("mustNum");
+		document.getElementById("getYMD").innerHTML = "分别获得年月日：年" + tool.getYMD("year") 
+																	+ "，月" + tool.getYMD("month")
+																	+ "，日" + tool.getYMD("day");
+		tool.getImgInfo( "http://b.zol-img.com.cn/desk/bizhi/image/2/2560x1600/1365477614755.jpg",function(data){
+			document.getElementById("getImgInfo").innerHTML = "宽:"+data.width+",高:"+data.height+",耗时:"+data.time+"毫秒,url:"+data.url;
+		},function(data){
+			document.getElementById("getImgInfo").innerHTML = data.error_message;
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+        <div class="wrap-header">
+            <div class="pdleft12">
+                <i class="iconclary">&#xe611;</i><a href="{{root}}">首页</a>
+                <span class="nav-step">&gt;</span>
+                <a href="{{artical}}">文章管理</a>
+                <span class="nav-step">&gt;</span>
+                <span>新增文章</span>
+            </div>
+        </div>
+        <div class="wrap-main">
+            <div class="insert-from">
+                <form action="{{insert}}" method="post">
+                    <table class="insert-box" width="100%">
+                        <tbody>
+                            <tr>
+                                <th width="120">访问地址 :</th>
+                                <td><input type="text" name="seo_url" /></td>
+                            </tr>
+                            <tr>
+                                <th>标题 :</th>
+                                <td><input type="text" name="title" /></td>
+                            </tr>
+                            <tr>
+                                <th>简介 :</th>
+                                <td><input type="text" name="intro" /></td>
+                            </tr>
+                            <tr>
+                                <th>作者 :</th>
+                                <td><input type="text" name="author" /></td>
+                            </tr>
+                            <tr>
+                                <th>缩略图 :</th>
+                                <td><input type="file" name="thumbnail" /><input type="button" value="upload" name="upload" /></td>
+                            </tr>
+                            <tr>
+                                <th>内容 :</th>
+                                <td><textarea class="common-insert-textarea" name="content" id="" cols="80" rows="7"></textarea></td>
+                            </tr>
+                            <tr>
+                                <th>分类 :</th>
+                                <td>
+                                    {{#each category}}
+                                        <label for="category{{id}}"><input type="radio" id="category{{id}}" name="category" value="{{id}}" />{{name}}</label>
+                                    {{/each}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>标签 :</th>
+                                <td>
+                                    {{#each tag}}
+                                        <label for="tag{{id}}"><input type="checkbox" name="tag" id="tag{{id}}" value="{{id}}"/>{{name}}</label>
+                                    {{/each}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Title :</th>
+                                <td><input type="text" name="seo_title" /></td>
+                            </tr>
+                            <tr>
+                                <th>Keyword :</th>
+                                <td><input type="text" name="seo_keyword" /></td>
+                            </tr>
+                            <tr>
+                                <th>Description :</th>
+                                <td><input type="text" name="seo_description" /></td>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <td>
+                                    <input class="btn" type="submit" value="提交"/>
+                                    <input class="btn" type="submit" value="取消"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <input type="hidden" value="insert" name="params" id="JS_params"/>
+                </form>
+            </div>
+        </div>

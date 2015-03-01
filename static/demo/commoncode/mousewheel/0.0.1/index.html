@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>mousewheel</title>
+<style>
+	#gundongtiao {
+		float: left;
+		width: 200px;
+	}
+	#mousewheel {
+		float: left;
+		width: 400px;
+		height: 200px;
+		background: #f0f0f0;
+	}
+</style>
+</head>
+<body>
+	<div id="gundongtiao"></div>
+	<div id="mousewheel">0</div>
+
+	<script>
+		// recycle code
+		var html = "";
+		for(var i = 0; i < 200; i++){
+			html += "浏览器出现滚动条<br/>";
+		}
+		document.getElementById("gundongtiao").innerHTML= html;
+		// recycle code
+
+		var num = 0;
+		document.getElementById("mousewheel").onmousewheel = function(e){
+			// e.wheelDelta 小于0向下滚动，大于0向上滚动，一般值是120的倍数
+			if( e.wheelDelta < 0 ) this.innerHTML = ++num;
+			else this.innerHTML = --num;
+			e.preventDefault();
+		}
+	</script>
+</body>
+</html>

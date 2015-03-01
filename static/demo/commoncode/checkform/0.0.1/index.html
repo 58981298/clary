@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<style>
+	.test > span {
+		display: none; 
+	}
+</style>
+<script src="/js/jquery.min.1.11.1.js"></script>
+<script type="text/javascript">
+var objForm = {
+	//是否为空，参数：字符串；为空返回true，不为空返回false
+	isNull : function( str ){ 	
+		if ( str == '' ) return true; 
+		var regu = '^[ ]+$'; 
+		var re = new RegExp(regu); 
+		return re.test(str); 
+	},
+	// 判断input是否为空,为空弹框alerttext文案
+	isNullInput : function(ele, alerttext){
+		if( this.isNull(ele.val()) ){
+			alert(alerttext);
+			ele.focus();
+			return false;
+		} else return true;
+	},
+	// 判断input是否为空,为空弹框alerttext文案
+	isNullShow : function(ele, showEle){
+		if( this.isNull(ele.val()) ){
+			showEle.show();
+			return false;
+		} else {
+			showEle.hide();
+			return true;
+		}
+	},
+	// 判断select是否为空且选中的文本等于text,true便弹框alerttext文案
+	requiredSelect : function(ele,alerttext,text){
+		eleSelected = ele.find('option:selected');
+		if(eleSelected.index() == 0 && eleSelected.html() != text){
+			alert(alerttext);
+			ele.focus();
+			return false;
+		}
+		else return true;
+	},
+	//+-----------------------------------------------------------------
+	//+ 功能： 正则验证
+	//+ 接入参数： ele : 对象, type : 需验证的类型; alerttext : 弹出提示文本
+	//+ 详解参数type:  mobile手机; phone固话; mobilephone手机+固话; zipcode邮编; 
+	//+ 			   chinaid身份证; brithday生日日期
+	//+-----------------------------------------------------------------
+	basicReg : function(ele,type,rightEle,errorEle1,errorEle2){
+		var reg = /^$/, text = '';
+		switch(type){
+			case 'mobile': 
+				reg = /^1[3,4,5,7,8][0-9]{9}$/; 
+				text = '请输入正确的手机号码'; break;
+			case 'phone': 
+				reg=/^((\d{3}|\d{4})-(\d{7}|\d{8}))|((\d{3}|\d{4})-(\d{7}|\d{8})-\d{4})$/; 
+				text = '请输入正确的固定电话'; break;
+			case 'mobilephone': 
+				reg=/^(1[3,4,5,7,8][0-9]{9})|((\d{3}|\d{4})-(\d{7}|\d{8}))|((\d{3}|\d{4})-(\d{7}|\d{8})-\d{4})$/;
+				text = '请输入正确的联系电话'; break;
+			case 'zipcode': 
+				reg=/^[1-9]\d{5}(?!\d)$/;
+				text = '请输入正确的邮政编码'; break;
+			case 'chinaid': 
+				reg=/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+				text = '请输入正确的身份证号码'; break;
+			case 'brithday':
+				reg=/^(19[0-9]{2}||20[0-1][0-5])-([1-9]||0[1-9]||1[0-2])-([1-9]||0[1-9]||[1-2][0-9]||3[0-1])$/;
+				text = '请输入正确的生日日期'; break;
+			case "email":
+				reg=/^([a-z0-9]+[_\-\.]?)*[a-z0-9]+@([a-z0-9]+[_\-\.]?)*[a-z0-9]+\.[a-z]{2,5}$/i;
+				text = "请输入正确的电子邮箱"; break;
+			default:  return true;
+		}
+		if( reg.test(ele.val()) ){
+			rightEle.show();
+			return true;	
+		} else {
+			errorEle.show();
+			return false;
+		}
+	},
+	// 模仿单选, 存在seld类便返回true; 不存在便弹框提示语
+	seld : function(ele, alerttext){
+		if( ele.hasClass('seld') ) return true;
+		else{
+			alert(alerttext);
+			ele.focus();
+			return false;
+		} 
+	},
+	//+------------------------------------------------
+	//+ 实际验证表单数据区域，可修改
+	//+------------------------------------------------
+	validateData : function(){
+		if(
+			this.isNullShow( $('#mobile'), $('#mobileError') ),
+			this.isNullShow( $('#username'), $('#usernameError') ),
+			this.isNullShow( $('#username'), $('#usernameError') )
+		){
+			return true;
+		} else return false;
+	},
+	submitDemo : function(id){	// 提交实例，可修改使用
+		var formDate = {
+			'productid': id,
+			'realname':  $('#realname').val(),
+			'mobile':    $('#mobile').val(),
+			'address':   $('#province').val()+'$$'+$('#city').val()+'$$'+$('#district').val()+'$$'+$('#address').val(),
+			'zipcode':   $('#zipcode').val(),
+			'reason':    $('#reason').val()
+		}
+		console.log(json);
+		API.post(
+			'shiyong/apply/apply.iframe', // _G.APIBaseURL自定义的全局地址
+			formDate,
+			function(data){
+				console.log('error_code:'+data.error_code);
+				alert('已成功提交。');
+			},function(data){
+				console.log(data.error_message);
+			}
+		)
+	}
+	
+}
+
+	$(function(){
+
+		function yanzhengFocus(ele){
+			var id = ele.attr("id");
+			ele.siblings("span").hide();
+			if( ele.val() == "" && $("#"+id+"Focus") ){	$("#"+id+"Focus").show(); } 
+		}
+		function yanzhengBlur(ele){
+			var id = ele.attr("id");
+			var reg = ele.attr("reg");
+			ele.siblings("span").hide();
+			if( objForm.isNullShow(ele,$("#"+id+"Null")) && reg != "" && $("#"+id+"Error") ) objForm.basicReg(ele,reg,$("#"+id+"Error"),$("#"+id+"Right"));
+		}
+		
+		$('#mobile, #username, #password').focus(function(){
+			yanzhengFocus( $(this) );
+		});
+		$('#mobile, #username, #password').blur(function(){
+			yanzhengBlur( $(this) );
+		});
+	})
+
+
+
+
+</script>
+</head>
+<body>
+<input type="button" id="btn1" value="使用自定义alert" />
+
+<input type="button" id="btn2" value="使用原生alert" />
+	<div class="test">
+		<input id="mobile" type="text" reg="mobile" placeholder="手机号码不能为空">
+		<span id="mobileFocus">请填写11位数手机号码</span>
+		<span id="mobileNull">手机号格不能为空</span>
+		<span id="mobileError">手机号格式不正确</span>
+		<span id="mobileRight">正确</span>
+	</div>
+	<div class="test">
+		<input id="username" type="text" placeholder="输入用户名">
+		<span id="usernameFocus">用户名提交后就不能修改哦</span>
+		<span id="usernameNull">请设置密码</span>
+		<span id="usernameError">密码太短</span>
+	</div>
+	<div class="test">
+		<input id="password" type="text" placeholder="密码">
+		<span id="passwordFocus"></span>
+		<span id="passwordError">只能填写3-15个字符</span>
+	</div>
+	<script>
+		window.alert = function(qq){
+			var newAlert = document.getElementById("newAlert");
+			if( !newAlert ) {
+				var html = 
+'<div id="newAlert" style="position: fixed;left: 0px;top: 0px;width: 100%;height: 100%;min-width: 980px;z-index: 999999;">'+
+	'<a style="display: block; width: 100%; height: 100%; background: #333333; opacity: 0.8; position: absolute; -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=60); filter: progid:DXImageTransform.Microso"></a>'+
+	'<div style="position:relative;width:360px;height:180px;margin:30px auto;background: #f0f0f0;-moz-border-radius: 2px;-webkit-border-radius: 2px;border-radius: 2px; z-index:100;-moz-box-shadow: 6px 10px 25px 0px rgb( 0, 0, 0 );-webkit-box-shadow: 6px 10px 25px 0px rgb( 0, 0, 0 );box-shadow: 6px 10px 25px 0px rgb( 0, 0, 0 )">'+
+		'<div style="padding: 0 10px 0 14px;">'+
+			'<a style="position: absolute;top: 10px;right: 10px;display: block;width: 20px;height: 20px;line-height: 16px;text-align: center;background-color: rgb( 153, 153, 153 );filter: alpha(opacity: 85);-moz-opacity: 0.85;-html-opacity: 0.85;opacity: 0.85;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;font-family: Tahoma;color: #fff;font-size: 24px;">x</a>'+
+			'<div style="width: 280px; height: 100px;width: 335px;height: 80px;padding: 45px 0 0 0;">'+
+				'<span style="background: #fff;height: 64px;display: block;-moz-border-radius: 2px;-webkit-border-radius: 2px;border-radius: 2px;padding:3%;">'+qq+'</span>'+
+			'</div>'+
+			'<div id="newAlertTrue" style="display: block;width: 88px;height: 28px;line-height: 28px;margin:14px auto 0;text-align: center;background: #ff7fa6;border-radius: 4px;color: #fff;font-size: 14px; font-family: "SimSun";text-decoration: none;cursor: pointer;">确定</div>'+
+		'</div>'+
+	'</div>'+
+'</div>';
+				var body = document.getElementsByTagName("body")[0];
+				body.innerHTML += html;
+			}
+		}
+		alert(123123);
+	</script>
+</body>
+</html>

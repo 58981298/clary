@@ -1,0 +1,26 @@
+<textarea id="text-input" disabled="false" hidden>{{artical}}</textarea>
+<artical id="preview" class="markdown-body mtfifty">
+</artical>
+<script type="text/javascript" src="/common/js/markdown.js"></script>
+<script type="text/javascript">
+function Editor(input, preview) {
+    this.update = function () {
+      preview.innerHTML = markdown.toHTML(input.value);
+    }
+    input.editor = this;
+    this.update();
+}
+function codeFormat(data){
+	return data
+				.replace(/"([^"]+)"/ig, '<span class="string">"$1"</span>')
+
+				.replace(/(\$|break|delete|return|typeof|case|[^a-zA-Z]do[^a-zA-Z]|if|switch|catch|else|[^a-zA-Z]in[^a-zA-Z]|this|void|continue|false|instanceof|throw|while|debugger|finally|new|true|with|default|for|null|try)/g,'<span class="keywords">$1</span>')
+				.replace(/(document|event|find|function|getElementById|getElementsByTagName|length|replace|this|var)/gi, '<span class="attribute">$1</span>');
+}
+var $ = function (id) { return document.getElementById(id); };
+var $tag = function (id) { return document.getElementsByTagName(id); };
+new Editor($("text-input"), $("preview"));
+for( var i=0; i<$tag("code").length; i++ ){
+	$tag("code")[i].innerHTML = codeFormat($tag("code")[i].innerHTML);
+}
+</script>

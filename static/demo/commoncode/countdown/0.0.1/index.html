@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<style>
+	.count-down-time {}
+	.count-down-word {}
+</style>
+</head>
+<body>
+	<div id="countdown"></div>
+	<script>
+		/**
+		 * 倒计时
+		 * author: wangcl
+		 * version: 0.0.1
+		 */
+		var	CountDown = function(id){
+			var self = this;
+			this.id = id;
+			this.speed = 1000;  // 倒计时速度，默认1秒
+			this.beforeTime = new Date().getTime();  // 截止时间毫秒数
+			this.afterTime = new Date().getTime();  // 截止时间毫秒数
+			this.endTime = 0;  // 截止时间戳
+			/**
+			 * 倒计时结束时执行的函数
+			 */
+			this.endEvent = function(){};
+			/**
+			 * 倒计时的时分秒计算逻辑层
+			 */
+			this.calc = function(){	
+				self.beforeTime = new Date().getTime();
+				self.allSecond = Math.floor( (self.afterTime - self.beforeTime)/1000 );
+				self.second = Math.floor( self.allSecond%60 );
+				self.minute = Math.floor( self.allSecond/60%60 );
+				self.hour = Math.floor( self.allSecond/60/60%24 );
+				self.day = Math.floor( self.allSecond/60/60/24 );
+			};
+	  		/**
+			 * endTime截止时间戳有设置时，转为截止时间毫秒数
+			 */
+			this.initCalc = function(){
+				if(self.endTime != 0) self.afterTime = new Date( parseInt(self.endTime)*1000 ).getTime();
+				self.calc();
+			}
+			/**
+			 * 倒计时渲染层
+			 */
+			this.render = function(){
+				if(self.id != "undefined"){
+					self.wrap = document.getElementById(self.id);
+				}
+				self.calc();
+				if(self.allSecond <= 0){
+					if(self.allSecond == 0){ 
+						window.location.reload();
+					}
+					clearInterval( self.interval );
+					self.endEvent();
+					return false;
+				}
+				var html = '';
+				html += '<span class="count-down-time">' + self.day + '</span>';
+				html += '<span class="count-down-word">天</span>';
+				html += '<span class="count-down-time">' + self.hour + '</span>';
+				html += '<span class="count-down-word">时</span>';
+				html += '<span class="count-down-time">' + self.minute + '</span>';
+				html += '<span class="count-down-word">分</span>';
+				html += '<span class="count-down-time">' + self.second + '</span>';
+				html += '<span class="count-down-word">秒</span>';
+				self.wrap.innerHTML = html;
+			};
+			/**
+			 * 倒计时开始执行
+			 */
+			this.start = function(){
+				self.initCalc();
+				self.render();
+				if(self.allSecond >= 0){
+					self.interval = window.setInterval(function(){
+						self.render();
+					}, self.speed);
+				}
+			}
+		};
+
+		/**
+		 * 倒计时实例
+		*/
+		var countdown = new CountDown('countdown');
+		//countdown.endTime = new Date()/1000;
+		countdown.afterTime = new Date('2014-09-28 00:00:00');
+		countdown.endEvent = function(){
+			console.log("已到期");
+		};
+		countdown.start();
+	</script>
+</body>
+</html>

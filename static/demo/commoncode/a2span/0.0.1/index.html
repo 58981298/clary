@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<style>
+</style>
+</head>
+<body>
+	<div id="a2span"></div>
+	<script>
+		/**
+		 * 点击前是<a>-click，点击后是<span>-text并执行自定义函数，执行后是<a>-click
+		 */
+		var A2Span = function(id){
+	 		var self = this;
+	 		this.id = id;
+	 		this.wrap = null; // document.getElementById(id),获取id对象;
+	 		this.aText = "加载更多...";
+	 		this.spanText = "加载中...";
+	 		this.status = 1; // 1可点击，0不可点击
+	 		/**
+	 		 * 外部onclick处理完后，回调内置sendCallback
+	 		 */
+	 		this.sendCallback = function(){
+	 			self.status = 1;
+	 			self.render();
+	 		};
+	 		/**
+			 * 外部onclick，处理实际需求事件
+			 */
+	 		this.onclick = function(getCallback){};
+	 		/**
+			 * 内部onclick，处理(<a> to <span>) or (<span> to <a>)的渲染
+			 */
+	 		this._onclick = function(){
+	 			self.status = 0;
+	 			self.render();
+	 			self.onclick(self.sendCallback);
+	 		};
+	 		/**
+			 * A2Span渲染层
+			 */
+	 		this.render = function(){
+	 			if( self.id != undefined && self.id != "" ){
+	 				self.wrap = document.getElementById( self.id ); 
+	 			}
+	 			var html = '';
+	 			if( self.status == 1 ){
+	 				html += '<a id="a2spanId" href="javascript:void(0)">' + self.aText +'</a>';
+	 			} else if( self.status == 0 ){
+	 				html += '<span>' + self.spanText +'</span>';
+	 			}
+	 			self.wrap.innerHTML = html;
+	 			if( self.status == 1 ){
+	 				document.getElementById('a2spanId').onclick = function(){
+	 					self._onclick();
+	 				}
+	 			}
+	 		};
+	 	}
+	 	var aspan = new A2Span('a2span');
+	 	aspan.aText = "我是点击前前前前的文字";
+ 		aspan.spanText = "我是点击后后后后的文字";
+	 	aspan.onclick = function(getCallback){
+	 		console.log(1232133);
+	 		//getCallback();
+	 		setTimeout(function(){ getCallback(); },1000);
+	 	}
+	 	aspan.render();
+	</script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+	{{> head_start }}
+		<title>clary</title>
+		<link rel="stylesheet" type="text/css" href="/common/css/style.css">
+		<link rel="stylesheet" type="text/css" href="/common/css/markdown_artical.css">
+	{{> head_end_null}}
+	{{> body_header}}
+	{{> body_banner}}
+		<div class="wrap section mtfifty">
+<textarea id="text-input" disabled="false" hidden>
+## 前言
++ 前言必先水上一水，话说自从接触nodejs，就根本停不下来。
++ 一个前端就能使用的后台语言nodejs，对于前端攻城屎来说真是一大利器
++ 于是便萌发自己建站的想法，东溜溜西扒扒最终找了hexo，一个基于nodejs的静态blog框架
++ 可惜好景太短，hexo不合心意，无奈转投自己研发了
++ 幸好，短期内不需要完善的blog框架，目前只用于文章编写
++ 前期前端页包含首页、列表页、详细页
++ 前期后端功能包含：用户登录、分类编辑、标签编辑、文章编辑（后期版本再迭代吧，没那么多时间 <@>_<@> ）
++ 新的一年2015到了，开战
++ 开发需要：Nodejs,Express,Markdown,restful模型
++ 后期预算开发需要：seajs,mongodb
+
+
+## 日志
+建站基本完成，初步使用，新增文章hello-world　　o(╯□╰)o  
+End time: 2015-03-01
+</textarea>
+<artical id="preview" class="markdown-body">
+</artical>
+<script type="text/javascript" src="/common/js/markdown.js"></script>
+<script type="text/javascript">
+function Editor(input, preview) {
+    this.update = function () {
+      preview.innerHTML = markdown.toHTML(input.value);
+    }
+    input.editor = this;
+    this.update();
+}
+var $ = function (id) { return document.getElementById(id); };
+new Editor($("text-input"), $("preview"));
+</script>
+		</div>
+	{{> body_footer}}
+</html>

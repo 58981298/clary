@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>handlebars</title>
+<style>
+</style>
+
+<script src="js/handlebars-1.0.0.beta.6.js"></script>
+</head>
+<body>
+	<div id="hand"></div>
+	<div><br/><br/><br/></div>
+	<div id="handappend">
+		by append html, you know？
+		<hr>
+	</div>
+	<script id="handTemplate" type="text/x-handlebars-template">
+		{{#each this}}
+			<div>
+				{{#if type "==" 1}}死吧
+					{{else}} {{#if type "==" 2}}滚吧
+						{{else}} {{#if type "==" 3}}力吧
+							{{else}}哭吧
+						{{/if}}
+					{{/if}}
+				{{/if}}</div>
+			<div>{{name}}</div>
+			<div>{{age}}</div>
+			<div>{{make}}</div>
+			<hr>
+		{{/each}}
+	</script>
+	<script>
+		var json = {
+			list: 
+				[
+					{
+						type: 1,
+						name: "wangcl",
+						age: "18",
+						make: "china"
+					},
+					{
+						type: 2,
+						name: "test",
+						age: "22",
+						make: "jp"
+					},	
+					{
+						type: 3,
+						name: "luisd",
+						age: "33",
+						make: "am"
+					},
+					{
+						type: 4,
+						name: "vsdf",
+						age: "23",
+						make: "feizhou"
+					}
+				],
+			id: 0,
+			intro: "person info"
+		}
+		var objHandle = {
+			engine: Handlebars,    // 获取handlebars引擎
+			loadEle: "",    // 数据需加载对象
+			/**
+			 * 自定义逻辑函数
+			 */
+			calcFn: function(){
+				var self = this;
+				self.engine.registerHelper("if",function(v1, operator, v2, options){
+					v1 = Number(v1), v2 = Number(v2);
+					switch (operator) {
+						case '==':
+							return (v1 == v2) ? options.fn(this) : options.inverse(this);
+						case '!=':
+							return (v1 != v2) ? options.fn(this) : options.inverse(this);
+						case '===':
+							return (v1 === v2) ? options.fn(this) : options.inverse(this);
+						case '<':
+							return (v1 < v2) ? options.fn(this) : options.inverse(this);
+						case '<=':
+							return (v1 <= v2) ? options.fn(this) : options.inverse(this);
+						case '>':
+							return (v1 > v2) ? options.fn(this) : options.inverse(this);
+						case '>=':
+							return (v1 >= v2) ? options.fn(this) : options.inverse(this);
+						case '&&':
+							return (v1 && v2) ? options.fn(this) : options.inverse(this);
+						case '||':
+							return (v1 || v2) ? options.fn(this) : options.inverse(this);
+						default:
+							return options.inverse(this);
+					}
+				});
+			},
+			/**
+			 * 数据渲染层
+			 */
+			render: function(id, tempData, data){
+				var self = this;
+				if(id != "" && id != "undefined"){
+					self.loadEle = document.getElementById(id);
+				}
+				var tempFn = self.engine.compile(tempData, { noEscape: true });
+				self.calcFn();
+				self.loadEle.innerHTML = tempFn(data);
+			},
+			renderAppend: function(id, tempData, data){
+				var self = this;
+				if(id != "" && id != "undefined"){
+					self.loadEle = document.getElementById(id);
+				}
+				var tempFn = self.engine.compile(tempData, { noEscape: true });
+				self.calcFn();
+				self.loadEle.innerHTML = self.loadEle.innerHTML + tempFn(data);
+			}
+		}
+		objHandle.render("hand",document.getElementById("handTemplate").innerHTML, json.list);
+		objHandle.renderAppend("handappend",document.getElementById("handTemplate").innerHTML, json.list);
+	</script>
+</body>
+</html>

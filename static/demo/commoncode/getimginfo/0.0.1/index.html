@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+		<title>无标题</title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			var getImgInfo = function(url,fn,fn2){
+				var starttime = new Date().getTime();
+				url = url+"?"+starttime; // 图片加时间戳，防止缓存
+				var img = new Image();
+				var isExist = true;
+				img.onerror = function(){ isExist = false; } // 图片是否存在
+				img.src = url;
+				var interval = setInterval(function(){
+					if( !isExist ) { // 图片是否存在
+						clearInterval(interval);
+						if(fn2) fn2({ error_message: "image is not exist." });
+					}
+					if( img.width>0 || img.height >0 ){ //获得图片宽高，停止循环
+						clearInterval(interval);
+						if(fn) fn({
+							width: img.width,
+							height: img.height,
+							time: new Date().getTime()-starttime,
+						});
+						
+					}
+				},40);
+			}
+			getImgInfo( "http://b.zol-img.com.cn/desk/bizhi/image/2/2560x1600/1365477614755.jpg123123123",function(data){
+				console.log( data );
+			},function(data){
+				console.log( data );
+			});
+		</script>
+	</body>
+</html>
