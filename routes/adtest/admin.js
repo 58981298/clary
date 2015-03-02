@@ -234,6 +234,7 @@ exports.artical_post = function(req, res){
 		, params = req.body.params.split(",")
 		result = "";
 	if( params[0] === "insert" ){
+
 		req.body.tag = req.body.tag+"";
 		if( !req.body.seo_url || /^[ ]*$/.test(req.body.seo_url) ){
 			result = "访问路径不能为空";

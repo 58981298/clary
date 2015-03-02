@@ -42,6 +42,7 @@ app.use(cookieSession({
 
 app.use("/common/", express.static(__dirname+"/static/common"));
 app.use("/adtest/", express.static(__dirname+"/static/adtest"));
+app.use("/blog/thumbnail", express.static(__dirname+"/static/artical/thumbnail"));
 app.use("/demo/commoncode/", express.static(__dirname+"/static/demo/commoncode"));
 
 routes(app);

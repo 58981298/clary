@@ -9,11 +9,6 @@
         </div>
         <div class="wrap-main">
             <div class="insert-from">
-                <form action="/upload/" method="post" enctype='multipart/form-data'>
-                    <input type="file" id="slt" name="thumbnail" value="" />
-                    <input type="text" name="testt">
-                    <input type="submit" value="tijiao">
-                </form>
                 <form action="{{artical}}" method="post">
                     {{#with data}}
                     <table class="insert-box" width="100%">
@@ -36,7 +31,7 @@
                             </tr>
                             <tr>
                                 <th>缩略图 :</th>
-                                <td><input type="file" id="slt" name="thumbnail" value="{{thumbnail}}" /><input type="button" value="upload" name="upload" /></td>
+                                <td><input type="hidden" name="thumbnail" id="JS_thumbnail"><input type="file" id="JS_file_thumbnail" name="file_thumbnail" value="{{thumbnail}}" /><input type="button" value="上传" id="JS_btn_thumbnail" /><img src="/blog/thumbnail/{{thumbnail}}" id="JS_img_thumbnail" onerror="this.style.display='none'" /></td>
                             </tr>
                             <tr>
                                 <th>内容 :</th>
@@ -80,9 +75,46 @@
                             </tr>
                         </tbody>
                     </table>
-                    <input type="hidden" value="modify,{{id}}" name="params"/>
+                    <input type="hidden" value="modify,{{id}}" name="params" id="JS_params"/>
                     {{/with}}
                 </form>
                 
             </div>
         </div>
+
+        <script>
+
+            $("#JS_btn_thumbnail").on("click", function(){
+                var thumbnailForm = new FormData();
+                thumbnailForm.append("thumbnail",$("#JS_file_thumbnail")[0].files[0]);
+                thumbnailForm.append("id", $("#JS_params").val().split(",")[1]);
+                $.ajax({
+                    cache: false,
+                    url: "/upload/",
+                    type: "POST",
+                    data: thumbnailForm,
+                    contentType: false,
+                    processData: false,
+                    success: function(data){
+                        if( !!data.filename ){
+                            $("#JS_thumbnail").val( data.filename );
+                            if( $("#JS_img_thumbnail").length > 0 ){
+                                $("#JS_img_thumbnail").attr("src","/blog/thumbnail/"+data.filename+"?"+new Date().getTime()).show();
+                            } else {
+                                $("#JS_btn_thumbnail").closest("td").append('<img src="/blog/thumbnail/'+data.filename+'?'+new Date().getTime()+'" id="JS_img_thumbnail" />');
+                            }
+                        }
+                    },
+                    error: function(data){
+                        console.log(data);
+                    }
+                });
+                // var xhr=new XMLHttpRequest();
+                //  xhr.open("post","index.html",true);
+                //  xhr.onload= function (e) {
+                //      if(this.status==200)
+                //          document.getElementById("result").innerHTML=this.response;
+                //  };
+                //  xhr.send(formData);
+            })
+        </script>

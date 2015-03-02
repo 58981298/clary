@@ -18,7 +18,7 @@ module.exports = function(app){
 	app.get("/nav/", route_base.nav );
 	app.get("/demo/", route_base.demo );
 
-	app.post("/upload/", route_upload);
+	app.post("/upload/", route_upload);  
 
 	app.get("/test", function(req, res){
 		res.send( Date.now()+","+Date.now(30) );

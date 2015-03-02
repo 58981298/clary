@@ -30,7 +30,7 @@
                             </tr>
                             <tr>
                                 <th>缩略图 :</th>
-                                <td><input type="file" name="thumbnail" /><input type="button" value="upload" name="upload" /></td>
+                                <td><input type="file" name="thumbnail" id="JS_file_thumbnail" /><input type="button" value="upload" id="JS_btn_thumbnail" /></td>
                             </tr>
                             <tr>
                                 <th>内容 :</th>
@@ -77,3 +77,32 @@
                 </form>
             </div>
         </div>
+        <script>
+
+            $("#JS_btn_thumbnail").on("click", function(){
+                var thumbnailForm = new FormData();
+                thumbnailForm.append("thumbnail",$("#JS_file_thumbnail")[0].files[0]);
+                //thumbnailForm.append("id", );
+                $.ajax({
+                    cache: false,
+                    url: "/upload/",
+                    type: "POST",
+                    data: thumbnailForm,
+                    contentType: false,
+                    processData: false,
+                    success: function(data){
+                        console.log(data);
+                    },
+                    error: function(data){
+                        console.log(data);
+                    }
+                });
+                // var xhr=new XMLHttpRequest();
+                //  xhr.open("post","index.html",true);
+                //  xhr.onload= function (e) {
+                //      if(this.status==200)
+                //          document.getElementById("result").innerHTML=this.response;
+                //  };
+                //  xhr.send(formData);
+            })
+        </script>

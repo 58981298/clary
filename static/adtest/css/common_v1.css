@@ -122,7 +122,7 @@ body .dpib { display: inline-block; }
 .insert-box tr {}
 .insert-box tr > th, .insert-box tr > td { border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; }
 .insert-box tr > th { text-align: right; padding-right: 18px; }
-
+.insert-box tr > td img { display: block; max-width: 300px; }
 /* category */
 .wrap-category { padding: 10px 20px; }
 .main-left { float: left; width: 400px; padding-right: 5px; border-right: 1px solid #eee; }
