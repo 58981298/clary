@@ -9,7 +9,7 @@ module.exports = function(app){
 			else {
 				res.locals.layout = "blog/layout_all.html";
 				res.render("blog/blog", {
-					title: "blog",
+					title: "博客-clary",
 					list: data
 				});
 			}
@@ -27,6 +27,7 @@ module.exports = function(app){
 						res.locals.layout = "blog/layout_artical.html";
 						return res.render("blog/artical", {
 							title: data[i].title,
+							thumbnail: "/blog/thumbnail/"+data[i].thumbnail,
 							artical: data[i].content
 						})
 					}

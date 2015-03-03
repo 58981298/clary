@@ -140,3 +140,5 @@
 .markdown-body .string { color: rgb(255, 255, 45); }
 .markdown-body .keywords { color: red; }
 .markdown-body .attribute { color: rgb(50, 201, 255); }
+.markdown-body .title span { display: block; text-align: right; font-size: 0.5em; font-weight: normal; color: #999; }
+.markdown-body .thumbnail { display: block; max-height: 250px; margin: 0 auto; }
