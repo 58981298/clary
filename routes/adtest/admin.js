@@ -3,7 +3,8 @@ var db = require("localDB")
 	, path = require("path")
 	, fs = require("fs")
 	, formidable = require('formidable')
-	, util = require('util');
+	, util = require('util')
+	, os = require("os");
 
 var root_views = path.join(__dirname + "/../../views");
 
@@ -115,6 +116,7 @@ exports.main = function(req, res){
 				});
 			});
 		} else {
+
 			res.render(admin.root.substr(1)+"/"+who,{
 				logout: admin.logout,
 				root: admin.root,
@@ -124,9 +126,11 @@ exports.main = function(req, res){
 				list: [],
 				list_raw: [],
 				tag: admin.tag
+				
 			});
 		}
 	} else {
+		console.log( os.type()+os.platform() );
 		if( fs.existsSync(root_views+admin.root+"/"+who+".html") ){
 			res.render(admin.root.substr(1)+"/"+who,{
 				logout: admin.logout,
@@ -134,6 +138,8 @@ exports.main = function(req, res){
 				insert: admin.insert,
 				artical: admin.artical,
 				category: admin.category,
+				os: os.type()+"_"+os.arch(),
+				hostname: os.hostname()
 			});
 		} else {
 			res.redirect(admin.root+"/");

@@ -6,7 +6,7 @@ var express = require("express")
 	, cookieParser = require("cookie-parser")
 	, cookieSession = require("cookie-session")
 	, libs_tools = require("./libs/tools")
-	, libs_hbs = require("./libs/hbs");
+	, libs_hbs = require("./libs/hbs")
 
 var routes = require("./routes");
 
