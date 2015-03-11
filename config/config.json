@@ -1,0 +1,6 @@
+{
+	"db": {
+		"ip": "mongo.duapp.com",
+		"port": "8908"
+	}
+}

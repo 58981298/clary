@@ -21,6 +21,11 @@ module.exports = function(app){
 	app.post("/upload/", route_upload);  
 
 	app.get("/test", function(req, res){
+		return res.json({
+			body: req.body,
+			query: req.query,
+			params: req.params
+		});
 		res.send( Date.now()+","+Date.now(30) );
 	})
 

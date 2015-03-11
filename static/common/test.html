@@ -1,0 +1,29 @@
+<html>
+	<head>
+		<meta chatset="utf-8">
+		<title>sdf</title>
+		<script src="/common/js/jquery.min.js"></script>
+	</head>
+	<body>
+		sdfadfsasdfas
+		<script>
+			
+			$.ajax({
+				url: "/test",
+				type: "GET",
+				data: {
+					test: 123,
+					dfd: "sdf"
+				},
+				succes: function(data){
+					console.log("success");
+					console.log(data);
+				},
+				error: function(data){
+					console.log("error");
+				}
+
+			});
+		</script>
+	</body>
+</html>
