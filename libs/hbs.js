@@ -1,4 +1,6 @@
-var path = require("path");
+var path = require("path"),
+	os = require("os");
+var dl = os.release() == "6.1.7601" ? 0 : 3600000*8;
 module.exports = function(hbs){
 	hbs.registerHelper("addNull", function(num, context){
 		var result = "";
@@ -20,7 +22,7 @@ module.exports = function(hbs){
 		}
 	});
 	hbs.registerHelper("format", function(dateline, context){
-		return new Date(parseInt(dateline)).Format("yyyy-MM-dd hh:mm");
+		return new Date(parseInt(dateline+dl)).Format("yyyy-MM-dd hh:mm");
 	});
 	hbs.registerPartials(path.join(__dirname+"/../views/blog") );
 }
