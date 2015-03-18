@@ -17,7 +17,8 @@ function codeFormat(data){
 				.replace(/"([^"]+)"/ig, '<span class="string">"$1"</span>')
 
 				.replace(/(\$|break|delete|return|typeof|case|[^a-zA-Z]do[^a-zA-Z]|if|switch|catch|else|[^a-zA-Z]in[^a-zA-Z]|this|void|continue|false|instanceof|throw|while|debugger|finally|new|true|with|default|for|null|try)/g,'<span class="keywords">$1</span>')
-				.replace(/(document|event|find|function|getElementById|getElementsByTagName|length|replace|this|var)/gi, '<span class="attribute">$1</span>');
+				.replace(/(document|event|find|function|getElementById|getElementsByTagName|length|replace|this|var)/gi, '<span class="attribute">$1</span>')
+                .replace(/(Number|String)/gi, '<span class="vartype">$1</span>');
 }
 var $ = function (id) { return document.getElementById(id); };
 var $tag = function (id) { return document.getElementsByTagName(id); };
